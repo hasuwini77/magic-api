@@ -37,3 +37,12 @@ footer {
   background-color: #cbc5ea;
   min-height: 70%;
 }
+
+.form-menu,
+.result,
+.magic-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
