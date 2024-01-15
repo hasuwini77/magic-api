@@ -30,8 +30,9 @@ footer {
 }
 .main-content {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   padding: 24px;
   background-color: #cbc5ea;
   min-height: 70%;
