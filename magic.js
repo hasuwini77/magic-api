@@ -1,10 +1,13 @@
 $(() => {
-  MAGIC_API_CREATURE_A = "https://api.magicthegathering.io/v1/cards" + creatureCall;
-  MAGIC_API_CREATURE_B = "https://api.magicthegathering.io/v1/cards" + creatureCall;
-  let creatureCall = "?types=Creature";
-  resultDiv = $(".result");
+  let creatureCallWhite = "?types=Creature&colors=W&pageSize=100&contains=imageUrl";
 
-  const getRandomCard = async (url) => {
+  let creatureCallBlack = "?types=Creature&colors=B&pageSize=100&contains=imageUrl";
+
+  resultDiv = $(".result");
+  MAGIC_API_CREATURE_A = "https://api.magicthegathering.io/v1/cards" + creatureCallWhite;
+  MAGIC_API_CREATURE_B = "https://api.magicthegathering.io/v1/cards" + creatureCallBlack;
+
+  const getRandomCardA = async (url) => {
     $(".button-a").on("click", async function () {
       const wrapper = $(".form-menu");
       const loader = document.createElement("p");
@@ -21,19 +24,19 @@ $(() => {
 
       let data = await res.json();
       loader.remove();
+      let randomCard = data.cards.length > 0 ? data.cards[Math.floor(Math.random() * data.cards.length)] : null;
 
-      // Loop until a card with imageUrl is found
-      let randomCard;
-      do {
-        randomCard = data.cards[Math.floor(Math.random() * 100) + 1];
-      } while (!randomCard.imageUrl);
-
-      wrapper.append(createCard(randomCard));
-      console.log(data);
+      if (randomCard) {
+        wrapper.append(createCard(randomCard));
+        console.log(data);
+      } else {
+        loader.innerText = "No cards found";
+        loader.style.color = "red";
+      }
     });
   };
 
-  const getRandomSetCard = async (url) => {
+  const getRandomCardB = async (url) => {
     $(".button-b").on("click", async function () {
       const wrapper = $(".form-menu");
       const loader = document.createElement("p");
@@ -50,13 +53,20 @@ $(() => {
 
       let data = await res.json();
       loader.remove();
+      let randomCard = data.cards.length > 0 ? data.cards[Math.floor(Math.random() * data.cards.length)] : null;
 
-      console.log(data);
+      if (randomCard) {
+        wrapper.append(createCard(randomCard));
+        console.log(data);
+      } else {
+        loader.innerText = "No cards found";
+        loader.style.color = "red";
+      }
     });
   };
 
-  getRandomCard(MAGIC_API_CREATURE_A);
-  getRandomSetCard(MAGIC_API_CREATURE_B);
+  getRandomCardA(MAGIC_API_CREATURE_A);
+  getRandomCardB(MAGIC_API_CREATURE_B);
 
   /**
    * Creating an html element with a new card
@@ -65,22 +75,13 @@ $(() => {
    */
   function createCard(randomCard) {
     const card = document.createElement("div");
-    card.innerHTML = ` 
-        <h2> ${randomCard.name} </h2> 
-        <p class="card-type"> Type: ${randomCard.type} </p> 
-        <img src="${randomCard.imageUrl}" class="card-image" alt="${randomCard.originalType}> 
-        <p class="artist"> Artist: ${randomCard.artist} </p> 
-        `;
 
-    if (!randomCard.imageUrl) {
-      card.innerHTML = ` 
-        <h2> ${randomCard.name} </h2> 
-        <p class="card-type"> Type: ${randomCard.type} </p> 
-        <p class="no-image"> Oh no Boi! There was no image for this Card </p 
-        <p class="no-image"> Make sure to re-generate some more cards! </p> 
-        <p class="artist"> Artist: ${randomCard.artist} </p> 
-      `;
-    }
+    card.innerHTML = ` 
+    <h2>${randomCard.name}</h2> 
+    <p class="card-type">Type: ${randomCard.type}</p> 
+    <img src="${randomCard.imageUrl}" class="card-image" alt="${randomCard.originalType}">
+    <p class="artist">Artist: ${randomCard.artist}</p> 
+  `;
 
     card.classList.add("magic-card");
     const newCard = resultDiv.append(card);
