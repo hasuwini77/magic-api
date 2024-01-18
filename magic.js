@@ -9,9 +9,11 @@ $(() => {
 
   const getRandomCardA = async (url) => {
     $(".button-a").on("click", async function () {
+      $(".button-a").prop("disabled", true);
       const wrapper = $(".form-menu");
       const loader = document.createElement("p");
       loader.innerText = "Loading...";
+      loader.classList.add("loader-element");
       wrapper.append(loader);
 
       let res = await fetch(url);
@@ -38,9 +40,11 @@ $(() => {
 
   const getRandomCardB = async (url) => {
     $(".button-b").on("click", async function () {
+      $(".button-b").prop("disabled", true);
       const wrapper = $(".form-menu");
       const loader = document.createElement("p");
       loader.innerText = "Loading...";
+      loader.classList.add("loader-element");
       wrapper.append(loader);
 
       let res = await fetch(url);
@@ -87,4 +91,6 @@ $(() => {
     const newCard = resultDiv.append(card);
     return newCard;
   }
+
+  const activationButtons = () => {};
 });
