@@ -1,6 +1,7 @@
 $(() => {
-  MAGIC_API = "https://api.magicthegathering.io/v1/cards";
-  MAGIC_API_SET = "https://api.magicthegathering.io/v1/sets";
+  MAGIC_API_CREATURE_A = "https://api.magicthegathering.io/v1/cards" + creatureCall;
+  MAGIC_API_CREATURE_B = "https://api.magicthegathering.io/v1/cards" + creatureCall;
+  let creatureCall = "?types=Creature";
   resultDiv = $(".result");
 
   const getRandomCard = async (url) => {
@@ -54,8 +55,8 @@ $(() => {
     });
   };
 
-  getRandomCard(MAGIC_API);
-  getRandomSetCard(MAGIC_API_SET);
+  getRandomCard(MAGIC_API_CREATURE_A);
+  getRandomSetCard(MAGIC_API_CREATURE_B);
 
   /**
    * Creating an html element with a new card
