@@ -1,13 +1,14 @@
 $(() => {
   MAGIC_API = "https://api.magicthegathering.io/v1/cards";
+  MAGIC_API_SET = "https://api.magicthegathering.io/v1/sets";
   resultDiv = $(".result");
 
   const getRandomCard = async (url) => {
-    const clickButton = $("button").on("click", async function () {
+    $(".button-a").on("click", async function () {
       const wrapper = $(".form-menu");
       const loader = document.createElement("p");
       loader.innerText = "Loading...";
-      wrapper.empty().append(loader);
+      wrapper.append(loader);
 
       let res = await fetch(url);
 
@@ -31,11 +32,34 @@ $(() => {
     });
   };
 
+  const getRandomSetCard = async (url) => {
+    $(".button-b").on("click", async function () {
+      const wrapper = $(".form-menu");
+      const loader = document.createElement("p");
+      loader.innerText = "Loading...";
+      wrapper.append(loader);
+
+      let res = await fetch(url);
+
+      if (!res.ok) {
+        loader.innerText = "Impossible to fetch data";
+        loader.style.color = "red";
+        return;
+      }
+
+      let data = await res.json();
+      loader.remove();
+
+      console.log(data);
+    });
+  };
+
   getRandomCard(MAGIC_API);
+  getRandomSetCard(MAGIC_API_SET);
 
   /**
    * Creating an html element with a new card
-   * @param {{title: string, body: string}} magic
+   * @param {{title: string, body: string}} randomCard
    * @return {HTMLElement}
    */
   function createCard(randomCard) {
