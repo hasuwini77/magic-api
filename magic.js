@@ -99,7 +99,7 @@ $(() => {
 
   const resetGame = () => {
     resultDiv.empty();
-    $(".fight-button").empty();
+    $(".fight-button").empty().hide();
     $(".button-a").prop("disabled", false);
     $(".button-b").prop("disabled", false);
   };
