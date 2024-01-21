@@ -1,9 +1,10 @@
 $(() => {
   let creatureCallWhite = "?types=Creature&colors=W&pageSize=100&contains=imageUrl";
-
   let creatureCallBlack = "?types=Creature&colors=B&pageSize=100&contains=imageUrl";
 
   resultDiv = $(".result");
+  mainDiv = $("main-content");
+  let currentPlayer = "";
   MAGIC_API_CREATURE_A = "https://api.magicthegathering.io/v1/cards" + creatureCallWhite;
   MAGIC_API_CREATURE_B = "https://api.magicthegathering.io/v1/cards" + creatureCallBlack;
 
@@ -27,7 +28,7 @@ $(() => {
       let data = await res.json();
       loader.remove();
       let randomCard = data.cards.length > 0 ? data.cards[Math.floor(Math.random() * data.cards.length)] : null;
-
+      currentPlayer = "Player A";
       if (randomCard) {
         wrapper.append(createCard(randomCard));
         console.log(data);
@@ -58,7 +59,7 @@ $(() => {
       let data = await res.json();
       loader.remove();
       let randomCard = data.cards.length > 0 ? data.cards[Math.floor(Math.random() * data.cards.length)] : null;
-
+      currentPlayer = "Player B";
       if (randomCard) {
         wrapper.append(createCard(randomCard));
         console.log(data);
@@ -69,13 +70,9 @@ $(() => {
     });
   };
 
-  getRandomCardA(MAGIC_API_CREATURE_A);
-  getRandomCardB(MAGIC_API_CREATURE_B);
-
   /**
    * Creating an html element with a new card
    * @param {{title: string, body: string}} randomCard
-   * @return {HTMLElement}
    */
   function createCard(randomCard) {
     const card = document.createElement("div");
@@ -85,12 +82,23 @@ $(() => {
     <p class="card-type">Type: ${randomCard.type}</p> 
     <img src="${randomCard.imageUrl}" class="card-image" alt="${randomCard.originalType}">
     <p class="artist">Artist: ${randomCard.artist}</p> 
+    <p class="player-name"> ${currentPlayer} </p> 
   `;
-
     card.classList.add("magic-card");
-    const newCard = resultDiv.append(card);
-    return newCard;
+    resultDiv.append(card);
   }
 
-  const activationButtons = () => {};
+  const fightButton = async () => {
+    const promiseA = getRandomCardA(MAGIC_API_CREATURE_A);
+    const promiseB = getRandomCardB(MAGIC_API_CREATURE_B);
+
+    await Promise.all([promiseA, promiseB]);
+
+    if ($(".magic-card").length === 2) {
+      const newButton = $("<button>").text("Fight!").attr("id", "fight").addClass("fight-button");
+      mainDiv.append(newButton);
+    }
+  };
+
+  fightButton();
 });
