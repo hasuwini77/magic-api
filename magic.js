@@ -5,6 +5,11 @@ $(() => {
   resultDiv = $(".result");
   mainDiv = $(".main-content");
   let currentPlayer = "";
+  let playerAPower;
+  let playerAToughness;
+  let playerBPower;
+  let playerBToughness;
+
   MAGIC_API_CREATURE_A = "https://api.magicthegathering.io/v1/cards" + creatureCallWhite;
   MAGIC_API_CREATURE_B = "https://api.magicthegathering.io/v1/cards" + creatureCallBlack;
 
@@ -29,6 +34,8 @@ $(() => {
       loader.remove();
       let randomCard = data.cards.length > 0 ? data.cards[Math.floor(Math.random() * data.cards.length)] : null;
       currentPlayer = "Player A";
+      playerAPower = randomCard.power;
+      playerAToughness = randomCard.toughness;
       if (randomCard) {
         wrapper.append(createCard(randomCard));
         console.log(data);
@@ -60,6 +67,8 @@ $(() => {
       loader.remove();
       let randomCard = data.cards.length > 0 ? data.cards[Math.floor(Math.random() * data.cards.length)] : null;
       currentPlayer = "Player B";
+      playerBPower = randomCard.power;
+      playerBToughness = randomCard.toughness;
       if (randomCard) {
         wrapper.append(createCard(randomCard));
         console.log(data);
@@ -88,6 +97,28 @@ $(() => {
     resultDiv.append(card);
   }
 
+  const resetGame = () => {
+    resultDiv.empty();
+    $(".fight-button").empty();
+    $(".button-a").prop("disabled", false);
+    $(".button-b").prop("disabled", false);
+  };
+
+  fightStart = () => {
+    $(".fight-button").on("click", () => {
+      if (playerAPower >= playerBToughness && playerBPower < playerAToughness) {
+        alert(" Player A Wins the Game");
+        resetGame();
+      } else if (playerBPower >= playerAToughness && playerAPower < playerBToughness) {
+        alert("Player B Wins the Gamee ");
+        resetGame();
+      } else if (playerAPower >= playerBToughness && playerBPower >= playerAToughness) {
+        alert(" Both players DIE! DRAW! ");
+        resetGame();
+      }
+    });
+  };
+
   const fightButton = async () => {
     const promiseA = getRandomCardA(MAGIC_API_CREATURE_A);
     const promiseB = getRandomCardB(MAGIC_API_CREATURE_B);
@@ -99,6 +130,7 @@ $(() => {
         clearInterval(newInterval); // Stop the interval when the condition is met
         const newButton = $("<button>").text("Fight!").attr("id", "fight").addClass("fight-button");
         mainDiv.append(newButton);
+        fightStart();
       }
     }, 1000);
   };
