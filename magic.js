@@ -3,7 +3,7 @@ $(() => {
   let creatureCallBlack = "?types=Creature&colors=B&pageSize=100&contains=imageUrl";
 
   resultDiv = $(".result");
-  mainDiv = $("main-content");
+  mainDiv = $(".main-content");
   let currentPlayer = "";
   MAGIC_API_CREATURE_A = "https://api.magicthegathering.io/v1/cards" + creatureCallWhite;
   MAGIC_API_CREATURE_B = "https://api.magicthegathering.io/v1/cards" + creatureCallBlack;
@@ -94,10 +94,13 @@ $(() => {
 
     await Promise.all([promiseA, promiseB]);
 
-    if ($(".magic-card").length === 2) {
-      const newButton = $("<button>").text("Fight!").attr("id", "fight").addClass("fight-button");
-      mainDiv.append(newButton);
-    }
+    const newInterval = setInterval(() => {
+      if ($(".magic-card").length === 2) {
+        clearInterval(newInterval); // Stop the interval when the condition is met
+        const newButton = $("<button>").text("Fight!").attr("id", "fight").addClass("fight-button");
+        mainDiv.append(newButton);
+      }
+    }, 1000);
   };
 
   fightButton();
