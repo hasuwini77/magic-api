@@ -99,9 +99,18 @@ $(() => {
 
   const resetGame = () => {
     resultDiv.empty();
-    $(".fight-button").empty().hide();
+    $(".fight-button").empty();
+
     $(".button-a").prop("disabled", false);
     $(".button-b").prop("disabled", false);
+
+    // Check if the condition for generating cards is met
+    if ($(".magic-card").length === 2) {
+      $(".fight-button").show();
+    } else {
+      // If not, hide the button
+      $(".fight-button").hide();
+    }
   };
 
   fightStart = () => {
@@ -132,7 +141,7 @@ $(() => {
         mainDiv.append(newButton);
         fightStart();
       }
-    }, 1000);
+    }, 500);
   };
 
   fightButton();
