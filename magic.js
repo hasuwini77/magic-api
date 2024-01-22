@@ -1,6 +1,7 @@
 $(() => {
-  let creatureCallWhite = "?types=Creature&colors=W&pageSize=100&contains=imageUrl";
-  let creatureCallBlack = "?types=Creature&colors=B&pageSize=100&contains=imageUrl";
+  let creatureRandomCall = "random?q=t:creature";
+  NEW_API_CREATURE_A = "https://api.scryfall.com/cards/" + creatureRandomCall;
+  NEW_API_CREATURE_B = "https://api.scryfall.com/cards/" + creatureRandomCall;
 
   resultDiv = $(".result");
   mainDiv = $(".main-content");
@@ -10,139 +11,101 @@ $(() => {
   let playerBPower;
   let playerBToughness;
 
-  MAGIC_API_CREATURE_A = "https://api.magicthegathering.io/v1/cards" + creatureCallWhite;
-  MAGIC_API_CREATURE_B = "https://api.magicthegathering.io/v1/cards" + creatureCallBlack;
+  const getRandomCard = async (url, button) => {
+    button.prop("disabled", true);
+    const wrapper = $(".form-menu");
+    const loader = document.createElement("p");
+    loader.innerText = "Loading...";
+    loader.classList.add("loader-element");
+    wrapper.append(loader);
 
-  const getRandomCardA = async (url) => {
-    $(".button-a").on("click", async function () {
-      $(".button-a").prop("disabled", true);
-      const wrapper = $(".form-menu");
-      const loader = document.createElement("p");
-      loader.innerText = "Loading...";
-      loader.classList.add("loader-element");
-      wrapper.append(loader);
-
+    try {
       let res = await fetch(url);
 
       if (!res.ok) {
-        loader.innerText = "Impossible to fetch data";
-        loader.style.color = "red";
-        return;
+        throw new Error("Impossible to fetch data");
       }
 
       let data = await res.json();
-      loader.remove();
-      let randomCard = data.cards.length > 0 ? data.cards[Math.floor(Math.random() * data.cards.length)] : null;
-      currentPlayer = "Player A";
-      playerAPower = randomCard.power;
-      playerAToughness = randomCard.toughness;
-      if (randomCard) {
+
+      if (data.object === "card" && data.image_uris && data.image_uris.normal) {
+        let randomCard = data;
+        currentPlayer = button.hasClass("button-a") ? "Player A" : "Player B";
+        playerAPower = randomCard.power;
+        playerAToughness = randomCard.toughness;
         wrapper.append(createCard(randomCard));
         console.log(data);
       } else {
-        loader.innerText = "No cards found";
-        loader.style.color = "red";
+        throw new Error("No valid card found");
       }
-    });
-  };
-
-  const getRandomCardB = async (url) => {
-    $(".button-b").on("click", async function () {
-      $(".button-b").prop("disabled", true);
-      const wrapper = $(".form-menu");
-      const loader = document.createElement("p");
-      loader.innerText = "Loading...";
-      loader.classList.add("loader-element");
-      wrapper.append(loader);
-
-      let res = await fetch(url);
-
-      if (!res.ok) {
-        loader.innerText = "Impossible to fetch data";
-        loader.style.color = "red";
-        return;
-      }
-
-      let data = await res.json();
+    } catch (error) {
+      loader.innerText = error.message;
+      loader.style.color = "red";
+    } finally {
       loader.remove();
-      let randomCard = data.cards.length > 0 ? data.cards[Math.floor(Math.random() * data.cards.length)] : null;
-      currentPlayer = "Player B";
-      playerBPower = randomCard.power;
-      playerBToughness = randomCard.toughness;
-      if (randomCard) {
-        wrapper.append(createCard(randomCard));
-        console.log(data);
-      } else {
-        loader.innerText = "No cards found";
-        loader.style.color = "red";
-      }
-    });
+      button.prop("disabled", false);
+      // Remove the click event listener after generating a card
+      button.off("click");
+    }
   };
 
   /**
-   * Creating an html element with a new card
-   * @param {{title: string, body: string}} randomCard
+   * Creating an HTML element with a new card
+   * @param {object} randomCard
    */
   function createCard(randomCard) {
     const card = document.createElement("div");
 
-    card.innerHTML = ` 
-    <h2>${randomCard.name}</h2> 
-    <p class="card-type">Type: ${randomCard.type}</p> 
-    <img src="${randomCard.imageUrl}" class="card-image" alt="${randomCard.originalType}">
-    <p class="artist">Artist: ${randomCard.artist}</p> 
-    <p class="player-name"> ${currentPlayer} </p> 
-  `;
+    card.innerHTML = `
+      <h2>${randomCard.name}</h2>
+      <p class="card-type">Type: ${randomCard.type_line}</p>
+      <img src="${randomCard.image_uris.normal}" class="card-image" alt="${randomCard.name}">
+      <p class="artist">Artist: ${randomCard.artist}</p>
+      <p class="player-name">${currentPlayer}</p>
+    `;
     card.classList.add("magic-card");
     resultDiv.append(card);
   }
 
   const resetGame = () => {
     resultDiv.empty();
-    $(".fight-button").empty();
-
-    $(".button-a").prop("disabled", false);
-    $(".button-b").prop("disabled", false);
-
-    // Check if the condition for generating cards is met
-    if ($(".magic-card").length === 2) {
-      $(".fight-button").show();
-    } else {
-      // If not, hide the button
-      $(".fight-button").hide();
-    }
+    $(".fight-button").empty().hide();
+    $(".button-a, .button-b").prop("disabled", false);
   };
 
   fightStart = () => {
     $(".fight-button").on("click", () => {
       if (playerAPower >= playerBToughness && playerBPower < playerAToughness) {
-        alert(" Player A Wins the Game");
-        resetGame();
+        alert("Player A Wins the Game");
       } else if (playerBPower >= playerAToughness && playerAPower < playerBToughness) {
-        alert("Player B Wins the Gamee ");
-        resetGame();
+        alert("Player B Wins the Game");
       } else if (playerAPower >= playerBToughness && playerBPower >= playerAToughness) {
-        alert(" Both players DIE! DRAW! ");
-        resetGame();
+        alert("Both players DIE! DRAW!");
       }
+
+      resetGame();
     });
   };
 
-  const fightButton = async () => {
-    const promiseA = getRandomCardA(MAGIC_API_CREATURE_A);
-    const promiseB = getRandomCardB(MAGIC_API_CREATURE_B);
+  const generateRandomCreature = () => {
+    $(".button-a").on("click", () => {
+      getRandomCard(NEW_API_CREATURE_A, $(".button-a")).then(() => {
+        $(".button-a").prop("disabled", true);
+      });
+    });
 
-    await Promise.all([promiseA, promiseB]);
+    $(".button-b").on("click", () => {
+      getRandomCard(NEW_API_CREATURE_B, $(".button-b")).then(() => {
+        $(".button-b").prop("disabled", true);
+      });
+    });
 
-    const newInterval = setInterval(() => {
-      if ($(".magic-card").length === 2) {
-        clearInterval(newInterval); // Stop the interval when the condition is met
-        const newButton = $("<button>").text("Fight!").attr("id", "fight").addClass("fight-button");
-        mainDiv.append(newButton);
-        fightStart();
-      }
-    }, 500);
+    if ($(".magic-card").length === 2) {
+      const newButton = $("<button>").text("Fight!").attr("id", "fight").addClass("fight-button");
+      mainDiv.append(newButton);
+      fightStart();
+    }
   };
 
-  fightButton();
+  generateRandomCreature();
 });
