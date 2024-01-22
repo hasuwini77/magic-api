@@ -31,8 +31,13 @@ $(() => {
       if (data.object === "card" && data.image_uris && data.image_uris.normal) {
         let randomCard = data;
         currentPlayer = button.hasClass("button-a") ? "Player A" : "Player B";
-        playerAPower = randomCard.power;
-        playerAToughness = randomCard.toughness;
+        if (button.hasClass("button-a")) {
+          playerAPower = randomCard.power;
+          playerAToughness = randomCard.toughness;
+        } else {
+          playerBPower = randomCard.power;
+          playerBToughness = randomCard.toughness;
+        }
         wrapper.append(createCard(randomCard));
         console.log(data);
       } else {
@@ -91,20 +96,24 @@ $(() => {
     $(".button-a").on("click", () => {
       getRandomCard(NEW_API_CREATURE_A, $(".button-a")).then(() => {
         $(".button-a").prop("disabled", true);
+        checkAndCreateFightButton();
       });
     });
 
     $(".button-b").on("click", () => {
       getRandomCard(NEW_API_CREATURE_B, $(".button-b")).then(() => {
         $(".button-b").prop("disabled", true);
+        checkAndCreateFightButton();
       });
     });
 
-    if ($(".magic-card").length === 2) {
-      const newButton = $("<button>").text("Fight!").attr("id", "fight").addClass("fight-button");
-      mainDiv.append(newButton);
-      fightStart();
-    }
+    const checkAndCreateFightButton = () => {
+      if ($(".magic-card").length === 2) {
+        const newButton = $("<button>").text("Fight!").attr("id", "fight").addClass("fight-button");
+        mainDiv.append(newButton);
+        fightStart();
+      }
+    };
   };
 
   generateRandomCreature();
