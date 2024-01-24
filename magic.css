@@ -29,7 +29,6 @@ body {
 
 header {
   background-image: url(./img/magic_banner3.jpeg);
-
   background-size: cover;
   opacity: 90%;
 }
@@ -146,4 +145,46 @@ p.player-name {
   font-size: 1.2rem;
   color: #4095c6;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@media screen and (max-width: 768px) {
+  h1.title {
+    display: none;
+  }
+
+  h3 { 
+    font-size: 2rem;
+  }
+
+  .magic-card {
+    max-width: 300px; /
+
+  }
+
+  .result {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    flex-wrap: wrap; 
+  }
+
+  .button-a,
+.button-b,
+.fight-button {
+  display: inline-block;
+  padding: 0.3em 1.2em;
+  margin: 0 0.3em 0.3em 0;
+  border-radius: 2em;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: "Yusei Magic", sans-serif;
+  font-weight: 300;
+  color: #ffffff;
+  background-color: #4eb5f1;
+  text-align: center;
+  transition: all 0.2s;
+  font-size: 0.7rem;
+}
 }
