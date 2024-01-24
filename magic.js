@@ -49,8 +49,6 @@ $(() => {
     } finally {
       loader.remove();
       button.prop("disabled", false);
-      // Remove the click event listener after generating a card
-      button.off("click");
     }
   };
 
@@ -69,11 +67,13 @@ $(() => {
       <p class="player-name">${currentPlayer}</p>
     `;
     card.classList.add("magic-card");
+    resultDiv.css("display", "flex");
     resultDiv.append(card);
   }
 
   const resetGame = () => {
     resultDiv.empty();
+    resultDiv.css("display", "none");
     $(".fight-button").empty().hide();
     $(".button-a, .button-b").prop("disabled", false);
   };
