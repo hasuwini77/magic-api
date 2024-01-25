@@ -1,7 +1,8 @@
 $(() => {
   let creatureRandomCall = "random?q=t:creature";
+  let funnyCall = "+is:funny";
   NEW_API_CREATURE_A = "https://api.scryfall.com/cards/" + creatureRandomCall;
-  NEW_API_CREATURE_B = "https://api.scryfall.com/cards/" + creatureRandomCall;
+  NEW_API_FUNNY_CREATURE_B = "https://api.scryfall.com/cards/" + creatureRandomCall + funnyCall;
 
   resultDiv = $(".result");
   mainDiv = $(".main-content");
@@ -101,7 +102,7 @@ $(() => {
     });
 
     $(".button-b").on("click", () => {
-      getRandomCard(NEW_API_CREATURE_B, $(".button-b")).then(() => {
+      getRandomCard(NEW_API_FUNNY_CREATURE_B, $(".button-b")).then(() => {
         $(".button-b").prop("disabled", true);
         checkAndCreateFightButton();
       });

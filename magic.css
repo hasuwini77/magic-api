@@ -137,7 +137,8 @@ footer {
 
 .button-a,
 .button-b,
-.fight-button {
+.fight-button,
+.funny-btn {
   display: inline-block;
   padding: 0.3em 1.2em;
   margin: 0 0.3em 0.3em 0;
@@ -154,7 +155,8 @@ footer {
 }
 .button-a:hover,
 .button-b:hover,
-.fight-button:hover {
+.fight-button:hover,
+.funny-btn:hover {
   background-color: #0e5077;
   transform: scale(1.1);
 }
