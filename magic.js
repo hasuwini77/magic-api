@@ -62,7 +62,7 @@ $(() => {
 
     card.innerHTML = `
       <h2>${randomCard.name}</h2>
-      <p class="card-type">Type: ${randomCard.type_line}</p>
+      <p class="card-type">${randomCard.type_line}</p>
       <img src="${randomCard.image_uris.normal}" class="card-image" alt="${randomCard.name}">
       <p class="artist">Artist: ${randomCard.artist}</p>
       <p class="player-name">${currentPlayer}</p>

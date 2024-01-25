@@ -165,6 +165,8 @@ p.player-name {
   font-size: 1.8rem;
   color: #116290;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+    letter-spacing: 2px;
+text-transform: uppercase;
 }
 
 .button-a:hover::after,
@@ -193,6 +195,14 @@ p.player-name {
 
 .fight-button { 
   font-size: 1.8rem;
+}
+
+.game-wrapper { 
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  flex-wrap: wrap;
+  flex-direction: column;
 }
 
 @media screen and (max-width: 768px) {
