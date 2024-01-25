@@ -162,9 +162,37 @@ footer {
 }
 
 p.player-name {
-  font-size: 1.2rem;
-  color: #4095c6;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  font-size: 1.8rem;
+  color: #116290;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+.button-a:hover::after,
+.button-b:hover::after {
+  display: block;
+  position: absolute;
+  background-color: #0770ac;
+  color: #fff;
+  padding: 10px;
+  border-radius: 15px;
+  margin-top: 20px; 
+  margin-right: 5px;
+  z-index: 1;
+  opacity: 95%;
+  font-size: 1.4rem;
+}
+
+.button-a:hover::after { 
+   content: "Cool Stuff! This will generate a Random Creature for Player A";
+}
+
+.button-b:hover::after { 
+   content: "Fun facts! This will generate a Funny Creature for Player B";
+}
+
+
+.fight-button { 
+  font-size: 1.8rem;
 }
 
 @media screen and (max-width: 768px) {
@@ -213,5 +241,10 @@ p.player-name {
 }
 p.footer-para {
   font-size: 1rem;
+}
+
+.button-b:hover::after,
+.button-a:hover::after {
+  font-size: 0.8rem;
 }
 }
