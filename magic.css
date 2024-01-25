@@ -39,6 +39,22 @@ footer {
   background-blend-mode: hue;
   transform: scaleX(-1);
 }
+p.footer-para {
+  transform-origin: bottom center;
+  animation: rotate360 5s infinite linear;
+  color: white;
+ font-family: "Yusei Magic", sans-serif;
+   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+     font-size: 1.5rem;
+}
+
+@keyframes rotate360 {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  } } 
 
 header,
 footer {
@@ -133,7 +149,7 @@ footer {
   background-color: #4eb5f1;
   text-align: center;
   transition: all 0.2s;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
 }
 .button-a:hover,
 .button-b:hover,
@@ -185,6 +201,13 @@ p.player-name {
   background-color: #4eb5f1;
   text-align: center;
   transition: all 0.2s;
-  font-size: 0.7rem;
+  font-size: 0.9rem;
+}
+
+.fight-button { 
+  font-size: 1.2rem;
+}
+p.footer-para {
+  font-size: 1rem;
 }
 }
